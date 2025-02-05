@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adina❤️ </title>
+    <title>Adina❤️</title>
     <style>
         body {
             margin: 0;
             height: 100vh;
-            background: #fce4ec; /* Light pink background */
+            background: #fce4ec;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,15 +23,22 @@
             z-index: 2;
         }
 
-        h1 {
+        h1, .response p {
             color: #d81b60;
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 3px 3px 5px black;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .button {
-            padding: 10px 20px;
-            font-size: 1.2em;
+            padding: 20px 10px;
+            font-size: 1.1em;
             border: none;
             border-radius: 5px;
             color: white;
@@ -40,23 +47,8 @@
             transition: all 0.3s ease;
         }
 
-        .yes {
-            background: #4caf50;
-        }
-
-        .no {
-            background: #f44336;
-        }
-
-        .no-moving {
-            animation: move 1s ease-in-out infinite;
-        }
-
-        @keyframes move {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(20px); }
-            100% { transform: translateX(0); }
-        }
+        .yes { background: #4caf50; }
+        .no { background: #f44336; position: absolute; }
 
         .response {
             display: none;
@@ -64,137 +56,97 @@
             z-index: 1;
         }
 
-        .response p {
-            font-size: 1.5em;
-            color: #d81b60;
-            margin: 10px 0;
+        .popup-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        .pulsating-heart {
-            display: none;
+        .popup-image {
             width: 150px;
-            height: 150px;
-            margin: 20px auto;
-            position: relative;
-            z-index: 1;
+            height: auto;
+            animation: pop 0.5s ease-out;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
             100% { transform: scale(1); }
-        }
-
-        .heart-floating {
-            animation: explode 1.5s ease-out forwards;
-        }
-
-        @keyframes explode {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(3) translateY(-100vh); }
-        }
-
-        .hearts {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 0;
         }
 
         .heart {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            color: red;
+            font-size: 4em;
+            animation: floatUp 3s ease-in-out infinite;
         }
 
-        /* Inline SVG for Heart Shape */
-        .heart svg {
-            width: 100%;
-            height: 100%;
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-200px); }
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Asa-i ca lui Sebi ii este dor de Adina?</h1>
-        <button class="button yes" onclick="showResponse()">Foarte mult</button>
-        <button class="button no" onmouseover="moveNo()" onclick="moveNo()">Deloc</button>
+        <h1>Be my Valentine, Adina</h1>
+        <button class="button yes" onclick="showResponse()">100% DA 😍</button>
+        <button class="button no" onmouseover="moveNo()" onclick="moveNo()">Nu (sunt gay🏳️‍🌈)</button>
 
-        
         <div class="response">
-            <p>Pai asa, animalule!</p>
-            <div class="pulsating-heart" id="pulsating-heart">
-                <!-- Pulsating Heart SVG -->
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#f44336"/>
-                </svg>
-            </div>
+            <p>Hehe, stiam eu! Hai pa❤️‍🔥</p>
+            <div class="popup-image-container" id="popup-images"></div>
         </div>
-    </div>
-    
-    <div class="hearts" id="hearts">
-        <!-- Placeholder for hearts -->
     </div>
 
     <script>
-
         function showResponse() {
-            // Show response and hide buttons
             document.querySelector('.response').style.display = 'block';
             document.querySelector('.button.yes').style.display = 'none';
             document.querySelector('.button.no').style.display = 'none';
-
-            // Show pulsating heart
-            const pulsatingHeart = document.getElementById('pulsating-heart');
-            pulsatingHeart.style.display = 'block';
-            pulsatingHeart.style.animation = 'pulse 1.5s infinite';
-
-            // Generate hearts
+            generateImages();
             generateHearts();
         }
 
         function moveNo() {
-    const noButton = document.querySelector('.button.no');
-    
-    // Define the movement range around the center of the viewport
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    const rangeX = 200; // Width of the movement area (adjust as needed)
-    const rangeY = 100; // Height of the movement area (adjust as needed)
+            const noButton = document.querySelector('.button.no');
+            const x = Math.random() * 200 - 100;
+            const y = Math.random() * 100 - 50;
+            noButton.style.transform = `translate(${x}px, ${y}px)`;
+        }
 
-    // Calculate random x and y positions within the restricted range
-    const x = centerX - rangeX / 2 + Math.random() * rangeX - noButton.offsetWidth / 2;
-    const y = centerY - rangeY / 2 + Math.random() * rangeY - noButton.offsetHeight / 2;
+        function generateImages() {
+            const imageContainer = document.getElementById('popup-images');
+            const imageSources = ["Adina.spin.gif", "Adina2.jpg", "Adina2.png", "Adina4.jpg", "monkey.gif"];
 
-    noButton.style.position = 'absolute';
-    noButton.style.left = `${x}px`;
-    noButton.style.top = `${y}px`;
-}
-
-
+            imageSources.forEach((src, index) => {
+                let img = document.createElement('img');
+                img.src = src;
+                img.alt = "Random Image";
+                img.className = "popup-image";
+                
+                img.style.transform = `translateX(${(index % 2 === 0 ? -1 : 1) * (Math.random() * 20)}px) rotate(${(Math.random() * 10 - 5)}deg)`;
+                
+                imageContainer.appendChild(img);
+            });
+        }
 
         function generateHearts() {
-            const heartContainer = document.getElementById('hearts');
-            for (let i = 0; i < 30; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart heart-floating';
-                heart.style.left = `${Math.random() * 100}%`;
-                heart.style.top = `${Math.random() * 100}%`;
-                heart.style.animationDelay = `${Math.random() * 2}s`;
-
-                // Inline SVG for Floating Hearts
-                heart.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#f44336"/>
-                    </svg>
-                `;
-
-                heartContainer.appendChild(heart);
+            for (let i = 0; i < 50; i++) {
+                let heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                document.body.appendChild(heart);
+                
+                let startX = Math.random() * window.innerWidth;
+                let startY = Math.random() * window.innerHeight;
+                heart.style.left = `${startX}px`;
+                heart.style.top = `${startY}px`;
+                
+                setTimeout(() => heart.remove(), 3000);
             }
         }
     </script>
